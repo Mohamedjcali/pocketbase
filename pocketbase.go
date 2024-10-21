@@ -131,6 +131,15 @@ func NewWithConfig(config Config) *PocketBase {
 	return pb
 }
 
+// Method to set a new data directory for the app
+func (pb *PocketBase) SetDataDir(newDataDir string) {
+	pb.dataDirFlag = newDataDir
+	// Update the app's BaseApp config if already bootstrapped
+	if pb.IsBootstrapped() {
+		pb.appWrapper.App.(*core.BaseApp).DataDir = newDataDir
+	}
+}
+
 // Start starts the application, aka. registers the default system
 // commands (serve, migrate, version) and executes pb.RootCmd.
 func (pb *PocketBase) Start() error {
@@ -266,7 +275,7 @@ func inspectRuntime() (baseDir string, withGoRun bool) {
 	return
 }
 
-// newErrWriter returns a red colored stderr writter.
+// newErrWriter returns a red colored stderr writer.
 func newErrWriter() *coloredWriter {
 	return &coloredWriter{
 		w: os.Stderr,
@@ -274,7 +283,7 @@ func newErrWriter() *coloredWriter {
 	}
 }
 
-// coloredWriter is a small wrapper struct to construct a [color.Color] writter.
+// coloredWriter is a small wrapper struct to construct a [color.Color] writer.
 type coloredWriter struct {
 	w io.Writer
 	c *color.Color
