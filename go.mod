@@ -1,5 +1,4 @@
 module github.com/Mohamedjcali/pocketbase
-
 go 1.21
 
 require (
